@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Find your dog-friendly apartment">
+    <meta name="author" content="Chelsea Kolb">
+    <link rel="shortcut icon" href="/static/images/favicon_static/favicon.ico" type="image/x-icon">
+    <!-- <link rel="icon" href="/static/images/favicon_animated/favicon.ico" type="image/x-icon"> -->
+
+
+      <title>dogHouse | About Me</title>
+
+
+    <!-- Bootstrap core CSS -->
+   <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Genericons core CSS -->
+    <link href="/static/vendor/genericons/genericons/genericons.css" rel="stylesheet">
+
+    <!-- Your custom styles -->
+    <link href="/static/css/style.css" rel="stylesheet">
+  </head>
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <!-- <a class="navbar-left">
+            <img style="width:80px; margin-top:10px" src=images/dogHouseLogo_white.png>
+          </a> -->
+          <a class="navbar-brand text-info">dogHouse</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+          <li class="active"><a href="/index">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a target="_blank" href="https://www.linkedin.com/in/chelsea-kolb">Contact Me</a></li>
+      </div><!--/.nav-collapse -->
+    </nav>
+
+  <div class="container">
+    <div class="container-fluid">
+      <div class="row">
+        <br><br><br>
+      </div>
+        <div class="col-md-12">
+          <p> <font size="+2"> dogHouse was designed to help dog owners in Pittsburgh find their best apartments. </font></p>
+          <p> <font size="+1"> You can learn more about dogHouse from the <a href="https://github.com/cmkolb">git</a> repository.</font></p>
+       </div>
+    </div>
+  </div>
+    <script type="text/javascript">
+      // Dynamically add the bootstrap 'active' class to navbar links.
+      $(document).ready(function ($) {
+        var urlPath = window.location.pathname.split('/')[1];
+        // if urlPath is empty, redefine to the string 'index'
+        urlPath === '' ? urlPath = 'index' : urlPath = urlPath;
+        $('.nav a[href="'+ urlPath +'"]').parent().addClass('active');
+      });
+    </script>
+
+  </body>
+</html>

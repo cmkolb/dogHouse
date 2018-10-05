@@ -3,14 +3,23 @@ import numpy as np
 import googlemaps
 import os
 import pickle
-from math import pi
+from math import pi, radians
 
-filename = '/Users/chelseakolb/Box Sync/InsightProject/dogHouse/dogHouseApp/finalized_model.sav'
-KDEmodel = pickle.load(open(filename, 'rb'))
+# filename = 'finalized_model_parks.sav'
+# KDEmodel = pickle.load(open(filename, 'rb'))
+
+filename = '/Users/chelseakolb/Box Sync/InsightProject/dogHouse/finalized_model_parks.sav'
+parksKDEmodel = pickle.load(open(filename, 'rb'))
+
+filename = '/Users/chelseakolb/Box Sync/InsightProject/dogHouse/finalized_model_restaurants.sav'
+restaurantsKDEmodel = pickle.load(open(filename, 'rb'))
+
+filename = '/Users/chelseakolb/Box Sync/InsightProject/dogHouse/finalized_model_services.sav'
+servicesKDEmodel = pickle.load(open(filename, 'rb'))
 
 app = Flask(__name__)
 
-f = open('/Users/chelseakolb/Box Sync/InsightProject/dogHouse/dogHouseApp/gmaps_key.txt', 'r')
+f = open('/Users/chelseakolb/Box Sync/InsightProject/dogHouse/dogHouseApp/gmaps.key', 'r')
 gkey = f.readline()
 
 @app.route('/')
@@ -26,6 +35,7 @@ def about():
 def results(gkey=str(gkey)):
     # user_input
     user_input = request.args.get('ID')
+
     # convert address into the long, lat format
     gmaps = googlemaps.Client(key=gkey)
     geocode_result = gmaps.geocode(address=user_input, language='python')
@@ -33,15 +43,31 @@ def results(gkey=str(gkey)):
     lng = geocode_result[0]['geometry']['location']['lng']
 
     # convert to radians
-    lat_rad = lat*pi/180
-    long_rad = lng*pi/180
-
+    lat_rad = radians(lat)
+    long_rad = radians(lng)
     eval_data = np.hstack([lat_rad, long_rad])
     eval_data = eval_data.reshape(1,-1)
-    z = KDEmodel.score(eval_data)
-    the_result = int(z)
 
-    return render_template("output.html", latcnt=lat, lngcnt=lng, the_result=the_result)
+    p = parksKDEmodel.score_samples(eval_data)
+    pmin, pmax = (9.98162084, 10.74619642)
+    p = (p - pmin) / (pmax - pmin) * 100
+    park_result = int(p)
+
+    r = restaurantsKDEmodel.score_samples(eval_data)
+    rmin, rmax = (9.98162084, 10.74619642)
+    r = (r - rmin) / (rmax - rmin) * 100
+    restaurant_result = int(r)
+
+    s = servicesKDEmodel.score_samples(eval_data)
+    smin, smax = (9.98162084, 10.74619642)
+    s = (s - smin) / (smax - smin) * 100
+    service_result = int(s)
+
+    # user_parkWeight = request.args.get('parksWeight')
+    # user_restaurantWeight = request.args.get('restaurantsWeight')
+    # user_servicesWeight = request.args.get('servicesWeight')
+
+    return render_template("output.html", latcnt=lat, lngcnt=lng, the_result=park_result)
 
 
 if __name__ == '__main__':

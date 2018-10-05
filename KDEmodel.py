@@ -9,7 +9,7 @@ import pickle
 import psycopg2
 from math import pi
 from sklearn.model_selection import GridSearchCV
-from sklearn.cross_validation import LeaveOneOut
+from sklearn.model_selection import LeaveOneOut
 
 dbname = 'dogApts_db'
 username = 'chelseakolb'
@@ -62,54 +62,37 @@ def points_in_polys(points, polys):
             mask = mask | points_inside_poly(points, poly)
     return np.array(mask)
 
-
-def calculateDensityScore(filenames, title_string = None, min_lat = 38, max_lat = 42, min_lon = -82, max_lon = -78, res = .001):
-    frameFiles = pd.DataFrame()
-    listFiles = []
-    for file in filenames:
-        df = pd.read_csv(file)
-        listFiles.append(df)
-    d = pd.concat(listFiles, ignore_index = True, sort = True)
-
+def developDensityModel(filename, name=None, title_string=None, min_lat=38, max_lat=42, min_lon=-82, max_lon=-78, res=.01):
+    d = pd.read_csv(filename)
     if not (('latitude' in d.columns) and ('longitude' in d.columns)):
         raise Exception('Error: dataset must contain lat and lon')
 
     #Filter for events with locations.
     geolocated = d.dropna(subset = ['latitude', 'longitude'])
     idxs = (geolocated['latitude'] > min_lat) & (geolocated['latitude'] < max_lat)
-    idxs = idxs &  (geolocated['longitude'] > min_lon) & (geolocated['longitude'] < max_lon)
+    idxs = idxs & (geolocated['longitude'] > min_lon) & (geolocated['longitude'] < max_lon)
     geolocated = geolocated.loc[idxs]
-    geolocated['lat_rad'] = geolocated.apply (lambda row: pi/180*row['latitude'],axis=1)
-    geolocated['long_rad'] = geolocated.apply (lambda row: pi/180*row['longitude'],axis=1)
+    geolocated['lat_rad'] = geolocated.apply (lambda row: radians(row['latitude']),axis=1)
+    geolocated['long_rad'] = geolocated.apply (lambda row: radians(row['longitude']),axis=1)
     print(geolocated.shape)
 
     #Fit the appropriate model: Kernel Density Estimation.
     print('Total number of points', len(geolocated))
-    bandwidths = 10 ** np.linspace(-1, 1, 100)
+    bandwidths = np.linspace(0., 1., 1000)
+
     grid = GridSearchCV(KernelDensity(kernel='gaussian', metric="haversine", algorithm="ball_tree"),
                     {'bandwidth': bandwidths},
-                    cv=LeaveOneOut(len(d)))
-    model = grid.fit(geolocated[['lat_rad', 'long_rad']])
+                    cv=5)
 
-    #Create a grid of points at which to predict.
-    x = np.arange(min_lat, max_lat, res)
-    y = np.arange(min_lon, max_lon, res)
-    X, Y = meshgrid(x, y)
-    numel = len(X) * len(X[0, :])
-    Z = np.zeros(X.shape)
-    unraveled_x = X.reshape([numel, 1])
-    unraveled_y = Y.reshape([numel, 1])
-    data_to_eval = np.hstack([unraveled_x, unraveled_y])
+    grid.fit(geolocated[['lat_rad', 'long_rad']])
+    bandwidth = grid.best_params_
 
-    #Make predictions using appropriate model.
-    density = np.exp(model.score_samples(data_to_eval))
-
+    model = KernelDensity(kernel='gaussian', metric="haversine", bandwidth = bandwidth["bandwidth"], algorithm="ball_tree").fit(geolocated[['lat_rad', 'long_rad']])
     ## save the model to disk
-    filename = 'finalized_model.sav'
+    filename = 'finalized_model_'+name+'.sav'
     pickle.dump(model, open(filename, 'wb'))
-    return density
+    return bandwidth
 
-filenames = ("pghDogParksGeocode.csv", "pghDogRestaurantsGeocode.csv", "pghDogServicesGeocode.csv")
-densityScores = calculateDensityScore(filenames=filenames)
-min(densityScores)
-max(densityScores)
+developDensityModel(filename="pghDogParksGeocode.csv", name='parks')
+developDensityModel(filename="pghDogRestaurantsGeocode.csv", name='restaurants')
+developDensityModel(filename="pghDogServicesGeocode.csv", name='services')

@@ -19,7 +19,7 @@ servicesKDEmodel = pickle.load(open(filename, 'rb'))
 
 app = Flask(__name__)
 
-f = open('/Users/chelseakolb/Box Sync/InsightProject/dogHouse/dogHouseApp/gmaps.key', 'r')
+f = open('/Users/chelseakolb/Box Sync/InsightProject/dogHouse/gmaps.key', 'r')
 gkey = f.readline()
 
 @app.route('/')

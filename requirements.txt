@@ -2,7 +2,7 @@
 # $ conda create --name <env> --file <this file>
 # platform: osx-64
 flask==1.0.2
-gunicorn==19.9.0
+gunicorn==19.1.0
 requests==2.19.1
 numpy==1.15.1
 matplotlib==3.0.0

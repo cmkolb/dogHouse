@@ -18,6 +18,8 @@ filename = '/Users/chelseakolb/Box Sync/InsightProject/dogHouse/finalized_model_
 servicesKDEmodel = pickle.load(open(filename, 'rb'))
 
 app = Flask(__name__)
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 
 f = open('/Users/chelseakolb/Box Sync/InsightProject/dogHouse/gmaps.key', 'r')
 gkey = f.readline()

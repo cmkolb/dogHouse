@@ -5,7 +5,6 @@ from geopy.geocoders import Nominatim, GoogleV3
 aptDF = pd.read_csv('pghDogApts.csv', na_values = ['NA']) # change csv file to file to geocode
 aptDF.head(5)
 
-#google_locator = GoogleV3(api_key="AIzaSyB7NeqCj7vorkZjEESq-y62hXshEiEzdYg")
 nominatim_locator = Nominatim(user_agent="dogHouse")
 
 def geocode_address(address, geolocator):

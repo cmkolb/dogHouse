@@ -68,6 +68,8 @@ min(apartments_data_from_sql['parkScore'])
 max(apartments_data_from_sql['restaurantScore'])
 min(apartments_data_from_sql['restaurantScore'])
 
+max(apartments_data_from_sql['serviceScore'])
+min(apartments_data_from_sql['serviceScore'])
 
 def updateParkScore(parkScore, minParkScore, maxParkScore):
     z = (parkScore - minParkScore) / (maxParkScore - minParkScore) * 100

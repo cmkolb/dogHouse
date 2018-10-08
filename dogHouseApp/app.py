@@ -54,12 +54,12 @@ def results(gkey=str(gkey)):
     park_result = int(p)
 
     r = restaurantsKDEmodel.score_samples(eval_data)
-    rmin, rmax = (9.98162084, 10.74619642)
+    rmin, rmax = (9.93675578, 11.31215909)
     r = (r - rmin) / (rmax - rmin) * 100
     restaurant_result = int(r)
 
     s = servicesKDEmodel.score_samples(eval_data)
-    smin, smax = (9.98162084, 10.74619642)
+    smin, smax = (10.15103269, 10.88248393)
     s = (s - smin) / (smax - smin) * 100
     service_result = int(s)
 

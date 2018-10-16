@@ -39,7 +39,7 @@ def about():
 def results(gkey=str(gkey)):
     # user_input
     user_input = request.args.get('ID')
-    selected_parkWeight = int(request.form['sliderParks'])
+    #selected_parkWeight = int(request.form['sliderParks'])
     # convert address into the long, lat format
     gmaps = googlemaps.Client(key=gkey)
     geocode_result = gmaps.geocode(address=user_input, language='python')

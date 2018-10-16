@@ -117,19 +117,11 @@
     </form>
   </div>
 
-        <div>
-        <form method="POST" class="slidecontainer">
+        <div class="slidecontainer">
           <h4>Drag the slider to assign dog park weight:</h4>
           <input type="range" min="0" max="100" value="33" class="sliderParks" name="sliderParks" id="parksRange"/>
-          <input type="submit" value="submit"/>
-        </form>
           <p>Value: <span id="parksWeight"></span></p>
         </div>
-
-        <form method="POST" action="test">
-            <input type="range" min="0" max="100" name="name_of_slider" />
-            <input type="submit" value="submit" />
-        </form>
 
         <div class="slidecontainer">
           <h4>Drag the slider to assign dog-friendly restaurant weight:</h4>
@@ -138,7 +130,8 @@
         </div>
 
         <div class="servicesOutput">
-          <h4> Dog services weight: <span id="servicesWeight">33</span></h4> <h4> Your location-weighted dog score: <span id="servicesWeight">95</span></h4>
+          <h4> Dog services weight: <span id="servicesWeight">33</span></h4>
+          <h4> Your location-weighted dog score: <span id="servicesWeight">95</span></h4>
         </div>
 
   <script>

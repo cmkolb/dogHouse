@@ -4,6 +4,8 @@ import googlemaps
 import os
 import pickle
 from math import pi, radians
+import logging
+import sys
 
 # filename = 'finalized_model_parks.sav'
 # KDEmodel = pickle.load(open(filename, 'rb'))
@@ -18,6 +20,8 @@ filename = '/Users/chelseakolb/Box Sync/InsightProject/dogHouse/finalized_model_
 servicesKDEmodel = pickle.load(open(filename, 'rb'))
 
 app = Flask(__name__)
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 
 f = open('/Users/chelseakolb/Box Sync/InsightProject/dogHouse/gmaps.key', 'r')
 gkey = f.readline()
@@ -35,7 +39,7 @@ def about():
 def results(gkey=str(gkey)):
     # user_input
     user_input = request.args.get('ID')
-
+    selected_parkWeight = int(request.form['sliderParks'])
     # convert address into the long, lat format
     gmaps = googlemaps.Client(key=gkey)
     geocode_result = gmaps.geocode(address=user_input, language='python')
@@ -68,7 +72,6 @@ def results(gkey=str(gkey)):
     # user_servicesWeight = request.args.get('servicesWeight')
 
     return render_template("output.html", latcnt=lat, lngcnt=lng, the_result=park_result)
-
 
 if __name__ == '__main__':
     app.run(debug=True)

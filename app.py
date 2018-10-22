@@ -67,11 +67,12 @@ def results(gkey=str(gkey)):
     s = (s - smin) / (smax - smin) * 100
     service_result = int(s)
 
-    # user_parkWeight = request.args.get('parksWeight')
-    # user_restaurantWeight = request.args.get('restaurantsWeight')
-    # user_servicesWeight = request.args.get('servicesWeight')
+    user_parkWeight = int(request.args.get('sliderParks'))
+    user_restaurantWeight = int(request.args.get('sliderRestaurants'))
+    user_serviceWeight = 100-user_parkWeight-user_restaurantWeight
+    weighted_score = int(park_result*user_parkWeight/100+restaurant_result*user_restaurantWeight/100+service_result*user_serviceWeight/100)
 
-    return render_template("output.html", latcnt=lat, lngcnt=lng, the_result=park_result)
+    return render_template("output.html", latcnt=lat, lngcnt=lng, the_result=weighted_score, user_parkWeight=user_parkWeight, user_restaurantWeight=user_restaurantWeight, user_serviceWeight=user_serviceWeight)
 
 if __name__ == '__main__':
     app.run(debug=True)

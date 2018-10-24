@@ -7,23 +7,20 @@ from math import pi, radians
 import logging
 import sys
 
-# filename = 'finalized_model_parks.sav'
-# KDEmodel = pickle.load(open(filename, 'rb'))
-
-filename = '/Users/chelseakolb/Box Sync/InsightProject/dogHouse/finalized_model_parks.sav'
+filename = 'finalized_model_parks.sav'
 parksKDEmodel = pickle.load(open(filename, 'rb'))
 
-filename = '/Users/chelseakolb/Box Sync/InsightProject/dogHouse/finalized_model_restaurants.sav'
+filename = 'finalized_model_restaurants.sav'
 restaurantsKDEmodel = pickle.load(open(filename, 'rb'))
 
-filename = '/Users/chelseakolb/Box Sync/InsightProject/dogHouse/finalized_model_services.sav'
+filename = 'finalized_model_services.sav'
 servicesKDEmodel = pickle.load(open(filename, 'rb'))
 
 app = Flask(__name__)
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
 
-f = open('/Users/chelseakolb/Box Sync/InsightProject/dogHouse/gmaps.key', 'r')
+f = open('gmaps.key', 'r')
 gkey = f.readline()
 
 @app.route('/')

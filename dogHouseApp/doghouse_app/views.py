@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request
+from doghouse_app import app
 import numpy as np
 import googlemaps
 import os
 import pickle
 from math import pi, radians
-import logging
+#import logging
 import sys
 
 filename = 'finalized_model_parks.sav'
@@ -16,9 +17,9 @@ restaurantsKDEmodel = pickle.load(open(filename, 'rb'))
 filename = 'finalized_model_services.sav'
 servicesKDEmodel = pickle.load(open(filename, 'rb'))
 
-app = Flask(__name__)
-app.logger.addHandler(logging.StreamHandler(sys.stdout))
-app.logger.setLevel(logging.ERROR)
+#app = Flask(__name__)
+#app.logger.addHandler(logging.StreamHandler(sys.stdout))
+#app.logger.setLevel(logging.ERROR)
 
 f = open('gmaps.key', 'r')
 gkey = f.readline()
@@ -71,5 +72,5 @@ def results(gkey=str(gkey)):
 
     return render_template("output.html", latcnt=lat, lngcnt=lng, the_result=weighted_score, user_parkWeight=user_parkWeight, user_restaurantWeight=user_restaurantWeight, user_serviceWeight=user_serviceWeight)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+#if __name__ == '__main__':
+#    app.run(debug=True)
